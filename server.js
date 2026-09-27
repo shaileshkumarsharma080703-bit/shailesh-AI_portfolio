@@ -9,6 +9,10 @@ const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static("public"));
 
+app.get("/", (req, res) => {
+  res.redirect("/index.html");
+});
+
 const portfolioFacts = `
 You are the AI assistant inside Shailesh Sharma's portfolio website.
 Answer only about Shailesh using the facts below. Be concise, friendly, and professional.
@@ -64,8 +68,11 @@ app.post("/api/ask", async (req, res) => {
     });
   }
 });
-
-app.listen(port, () => {
-  console.log(`Portfolio running at http://localhost:${port}`);
-});
 export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Portfolio running at http://localhost:${port}`);
+  });
+}
+
